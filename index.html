@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;">
+  <title>粉色悬浮便签</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 猫耳朵与吉祥物（置于便签外层，完整显示在顶边上） -->
+  <span class="ear ear-l" aria-hidden="true"><i></i></span>
+  <span class="ear ear-r" aria-hidden="true"><i></i></span>
+  <div class="mascot" id="mascot" role="button" tabindex="0" title="点我互动~"></div>
+
+  <!-- 便签主体 -->
+  <main class="note" id="note">
+    <!-- 背景装饰：极淡的漂浮云朵与星星 -->
+    <div class="decor" aria-hidden="true">
+      <span class="cloud cloud-1"></span>
+      <span class="cloud cloud-2"></span>
+      <span class="cloud cloud-3"></span>
+      <span class="spark spark-1">✦</span>
+      <span class="spark spark-2">✧</span>
+      <span class="spark spark-3">✦</span>
+    </div>
+
+    <!-- 背景简笔画（跟随主题颜色与风格） -->
+    <div class="doodles" id="doodles" aria-hidden="true"></div>
+
+    <!-- 顶部标题栏（拖动区域） -->
+    <header class="titlebar" id="titlebar">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="15.5" rx="5" ry="4.2"/><circle cx="5.6" cy="10" r="2.1"/><circle cx="9.7" cy="6.4" r="2.1"/><circle cx="14.3" cy="6.4" r="2.1"/><circle cx="18.4" cy="10" r="2.1"/></svg>
+      </span>
+      <input class="note-title" id="noteTitle" value="今日待办" spellcheck="false" maxlength="24" aria-label="便签标题">
+      <div class="tools" id="tools">
+        <button class="tool" id="btnNew" type="button" title="新建便签 (Ctrl+Alt+N)">
+          <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
+        </button>
+        <button class="tool" id="btnTheme" type="button" title="调色盘：自定义颜色">
+          <svg class="icon-s" viewBox="0 0 24 24"><circle cx="9" cy="9" r="5.2"/><circle cx="15" cy="9" r="5.2"/><circle cx="12" cy="15" r="5.2"/></svg>
+        </button>
+        <button class="tool active" id="btnPin" type="button" title="置顶开关 (Ctrl+Alt+T)">
+          <svg viewBox="0 0 24 24"><path d="M9.2 3h5.6l-1.1 6.2 3.6 2.7v2H6.7v-2l3.6-2.7L9.2 3zM11 14h2v7h-2z"/></svg>
+        </button>
+        <button class="tool" id="btnPass" type="button" title="点击穿透开关（再按 Ctrl+Alt+C 恢复）">
+          <svg viewBox="0 0 24 24"><ellipse cx="12" cy="15.5" rx="5" ry="4.2"/><circle cx="5.6" cy="10" r="2.1"/><circle cx="9.7" cy="6.4" r="2.1"/><circle cx="14.3" cy="6.4" r="2.1"/><circle cx="18.4" cy="10" r="2.1"/></svg>
+        </button>
+        <button class="tool" id="btnMin" type="button" title="最小化到托盘">
+          <svg viewBox="0 0 24 24"><path d="M5 11h14v2H5z"/></svg>
+        </button>
+        <button class="tool tool-close" id="btnClose" type="button" title="关闭（后台继续运行）">
+          <svg class="icon-s" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="wave" aria-hidden="true"></div>
+
+    <!-- 未完成数量提示 -->
+    <div class="todo-progress" id="todoProgress" hidden></div>
+
+    <!-- 事项列表 -->
+    <section class="list-wrap" id="listWrap">
+      <ul class="todo-list" id="todoList"></ul>
+      <div class="empty" id="emptyTip">
+        <span class="empty-face">(=^･ω･^=)</span>
+        <p>还没有事项鸭~<br>在下面添加第一条吧！</p>
+      </div>
+    </section>
+
+    <!-- 添加事项 -->
+    <footer class="adder">
+      <input id="itemInput" class="adder-input" placeholder="添加一条事项，回车确认~" maxlength="120" aria-label="新事项">
+      <button id="btnAdd" class="adder-btn" type="button" title="添加">
+        <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
+      </button>
+    </footer>
+
+    <!-- 底部信息栏 -->
+    <div class="meta">
+      <span class="meta-clock" id="clock">--:--</span>
+      <span class="meta-save" id="saveState">已自动保存</span>
+      <button class="save-heart" id="btnSave" type="button" title="立即保存，并送你一颗爱心~">
+        <svg viewBox="0 0 24 24"><path d="M12 20.5S3.2 15.3 1.6 10.4C.5 7 2.7 4 6 4c2 0 3.4 1.1 4.2 2.3.3.4.9.4 1.2 0C12.4 5.1 14 4 16 4c3.3 0 5.5 3 4.4 6.4C18.8 15.3 12 20.5 12 20.5z"/></svg>
+      </button>
+    </div>
+
+    <!-- 右下角缩放手柄 -->
+    <div class="resize" id="resizeHandle" title="拖动缩放">
+      <svg class="icon-s" viewBox="0 0 12 12"><path d="M10.5 1.5l-9 9M10.5 5.5l-5 5M10.5 9.5l-1 1"/></svg>
+    </div>
+
+    <!-- 穿透模式提示 -->
+    <div class="pass-tip" id="passTip">🐾 穿透模式已开启 · Ctrl+Alt+C 恢复</div>
+
+    <!-- 调色盘面板 -->
+    <div class="theme-panel" id="themePanel" hidden>
+      <div class="theme-head">
+        <span>🎨 调色盘</span>
+        <button class="mini del" id="btnThemeClose" type="button" title="关闭">
+          <svg class="icon-s" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="theme-preset-label">颜色主题（与吉祥物配套切换）</div>
+      <div class="theme-presets" id="themePresets"></div>
+      <div class="theme-rows" id="themeRows"></div>
+      <div class="theme-row theme-op">
+        <label for="rOpacity">不透明度</label>
+        <input type="range" id="rOpacity" min="80" max="100" step="1" value="98">
+        <span id="vOpacity">98%</span>
+      </div>
+      <div class="theme-row doodle-row">
+        <label>背景简笔画</label>
+        <div class="doodle-picker" id="doodlePicker"></div>
+      </div>
+      <div class="theme-actions">
+        <button id="btnThemeReset" type="button">恢复默认</button>
+      </div>
+      <p class="theme-tip">点击颜色卡片，颜色与吉祥物成套切换；也可在下方微调单个颜色</p>
+    </div>
+  </main>
+
+  <!-- 轻提示 -->
+  <div class="toast" id="toast" role="status"></div>
+
+  <!-- 编辑时跟随光标的小星星 -->
+  <div class="caret-star" id="caretStar" aria-hidden="true">✦</div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

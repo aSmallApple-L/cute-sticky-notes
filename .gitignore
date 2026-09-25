@@ -1,0 +1,13 @@
+node_modules/
+dist/
+build/
+.eb-cache/
+.build-log*.txt
+
+# 生成吉祥物时的临时中间文件
+_*
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini

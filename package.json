@@ -1,0 +1,67 @@
+{
+  "name": "cute-sticky-notes",
+  "version": "1.0.0",
+  "description": "卡通可爱风桌面悬浮便签（Electron）",
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "icons": "node assets/make-icons.js",
+    "dist": "electron-builder --win --macos",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --macos"
+  },
+  "build": {
+    "appId": "com.cute.stickynotes",
+    "productName": "粉色悬浮便签",
+    "asar": true,
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "renderer.js",
+      "style.css",
+      "assets/**"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "publish": null,
+    "win": {
+      "icon": "assets/icon.ico",
+      "sign": null,
+      "signAndEditExecutable": false,
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "shortcutName": "粉色悬浮便签",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico"
+    },
+    "mac": {
+      "icon": "assets/icon.icns",
+      "category": "public.app-catalog.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  }
+}

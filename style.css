@@ -1,0 +1,1309 @@
+/* ============================================================
+   粉色悬浮便签 · 卡通可爱风样式
+   配色：粉白 #FFF7FA / 浅粉 #FFEAF2 / 柔粉强调 #F09CBB / 深粉 #E2789F
+   文字：深梅子色 #4A2A36（高对比、清晰易读）
+   ============================================================ */
+
+:root {
+  --pink-white: #FFF7FA;
+  --pink-white-deep: #FFEAF2;
+  --accent: #F09CBB;
+  --accent-deep: #E2789F;
+  --ink: #4A2A36;
+  --ink-soft: #96677A;
+  --white-soft: rgba(255, 255, 255, 0.62);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: "沐瑶软糖体", "MiSans", "Yuanti SC", "YouYuan", "幼圆",
+    "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", "Segoe UI",
+    system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  background: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+  color-scheme: light;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* ---------- 背景装饰：云朵 / 星星（位于便签内） ---------- */
+
+.decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.cloud {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%,
+      rgba(255, 255, 255, 0.55),
+      rgba(255, 255, 255, 0.05) 70%);
+  animation: drift 30s ease-in-out infinite;
+  will-change: transform;
+}
+
+.cloud-1 {
+  width: 120px;
+  height: 44px;
+  left: -30px;
+  top: 30%;
+}
+
+.cloud-2 {
+  width: 84px;
+  height: 30px;
+  right: -22px;
+  top: 55%;
+  opacity: 0.7;
+  animation-duration: 38s;
+  animation-delay: -8s;
+}
+
+.cloud-3 {
+  width: 60px;
+  height: 22px;
+  left: 22%;
+  bottom: 12%;
+  opacity: 0.5;
+  animation-duration: 44s;
+  animation-delay: -20s;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(26px); }
+}
+
+.spark {
+  position: absolute;
+  color: var(--accent-soft);
+  font-size: 12px;
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+
+.spark-1 { left: 14%; top: 18%; }
+.spark-2 { right: 16%; top: 30%; font-size: 10px; animation-delay: -1.2s; }
+.spark-3 { left: 26%; bottom: 24%; animation-delay: -2.1s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.8) rotate(0deg); }
+  50% { opacity: 0.75; transform: scale(1.15) rotate(20deg); }
+}
+
+/* ---------- 便签主体 ---------- */
+
+.note {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  top: 40px; /* 顶部留白给猫耳 */
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 26px;
+  border: 1.5px solid rgba(255, 255, 255, 0.72);
+  outline: 1.5px dashed var(--accent-soft, rgba(240, 156, 187, 0.85));
+  outline-offset: -5px;
+  background: var(--note-bg, linear-gradient(165deg,
+      rgba(255, 250, 253, 0.98) 0%,
+      rgba(255, 234, 242, 0.98) 100%));
+  box-shadow:
+    0 10px 28px var(--shadow-soft, rgba(170, 90, 120, 0.26)),
+    0 2px 8px var(--shadow-softer, rgba(170, 90, 120, 0.17)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  overflow: hidden;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: noteIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes noteIn {
+  from { transform: scale(0.9) translateY(8px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+/* 悬停：轻微放大 + 阴影加深 */
+.note:hover {
+  transform: scale(1.012);
+  box-shadow:
+    0 16px 40px var(--shadow-soft, rgba(170, 90, 120, 0.34)),
+    0 3px 10px var(--shadow-softer, rgba(170, 90, 120, 0.21)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+/* 猫耳朵（坐于便签顶边，位于便签外层） */
+.ear {
+  position: absolute;
+  top: 24px;
+  width: 30px;
+  height: 26px;
+  z-index: 2;
+  background: linear-gradient(180deg, #FFF3F8, #FFDCE9);
+  border: 1.5px solid rgba(255, 255, 255, 0.88);
+  border-bottom: none;
+  border-radius: 14px 14px 0 0;
+  filter: drop-shadow(0 -2px 3px var(--shadow-soft, rgba(170, 90, 120, 0.16)));
+}
+
+.ear i {
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50% 50% 0 0;
+  background: var(--accent);
+  opacity: 0.55;
+}
+
+.ear-l { left: 34px; transform: rotate(-14deg); }
+.ear-r { right: 34px; transform: rotate(14deg); }
+
+/* ---------- 标题栏（拖动区域） ---------- */
+
+.titlebar {
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px 6px;
+  z-index: 2;
+}
+
+.logo {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  color: var(--accent-deep);
+  flex: none;
+}
+
+.logo svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.note-title {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  padding: 2px 6px;
+  border-radius: 8px;
+  border-bottom: 2px dotted transparent;
+  -webkit-app-region: no-drag;
+  outline: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.note-title:focus {
+  border-bottom-color: var(--accent);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.tools {
+  display: flex;
+  gap: 4px;
+  flex: none;
+  -webkit-app-region: no-drag;
+  border-radius: 999px;
+  padding: 0;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.tool {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: var(--white-soft);
+  color: #9E5F77;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.18s, background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+
+.tool svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.tool .icon-s {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.tool:hover {
+  transform: scale(1.18) rotate(-6deg);
+  background: #fff;
+  color: var(--accent-deep);
+  box-shadow: 0 3px 8px var(--accent-deep-soft, rgba(226, 120, 159, 0.38));
+}
+
+.tool.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.tool-close:hover {
+  background: var(--accent-deep);
+  color: #fff;
+}
+
+/* 穿透模式下工具区高亮（悬停即可恢复点击） */
+body.passthrough .tools {
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 10px var(--accent-deep-soft, rgba(226, 120, 159, 0.38));
+  padding: 2px;
+}
+
+/* 手绘波浪分隔线（颜色跟随主题） */
+.wave {
+  height: 8px;
+  margin: 2px 12px 0;
+  background-image: var(--wave-url, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8' viewBox='0 0 24 8'%3E%3Cpath d='M0 4 Q6 0 12 4 T24 4' fill='none' stroke='%23F09CBB' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"));
+  background-repeat: repeat-x;
+  background-size: 24px 8px;
+  opacity: 0.9;
+  flex: none;
+}
+
+/* ---------- 事项列表 ---------- */
+
+.list-wrap {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 6px 58px 2px 10px; /* 右侧留出吉祥物悬浮区 */
+}
+
+.list-wrap::-webkit-scrollbar {
+  width: 6px;
+}
+
+.list-wrap::-webkit-scrollbar-thumb {
+  background: var(--accent-soft, #F3BED4);
+  border-radius: 99px;
+}
+
+.list-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.todo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 6px 8px;
+  border-radius: 14px;
+  transition: background 0.18s;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.66);
+}
+
+/* 未完成事项：浅色底 + 左侧强调条，一眼能看到还有什么没做 */
+.item:not(.done) {
+  background: var(--accent-tint, rgba(240, 156, 187, 0.16));
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.item:not(.done):hover {
+  background: var(--accent-softer, rgba(240, 156, 187, 0.32));
+}
+
+/* 未完成的爱心预先填浅色，提示可勾选 */
+.item:not(.done) .check svg {
+  fill: var(--accent-softer);
+}
+
+/* 已完成：更淡的存在感 */
+.item.done {
+  opacity: 0.72;
+}
+
+/* 未完成数量提示 pill */
+.todo-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 2px 10px 4px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px var(--accent-deep-soft, rgba(226, 120, 159, 0.42));
+  animation: pillPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex: none;
+}
+
+.todo-progress[hidden] {
+  display: none;
+}
+
+.todo-progress .pill-num {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+@keyframes pillPop {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* 完成勾选：小爱心 */
+.check {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  color: var(--accent);
+  margin-top: 1px;
+}
+
+.check svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  transition: fill 0.2s, transform 0.2s;
+}
+
+.check:hover svg {
+  transform: scale(1.15);
+}
+
+.item.done .check svg {
+  fill: var(--accent-deep);
+  stroke: var(--accent-deep);
+}
+
+.item.pop .check svg {
+  animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); }
+  60% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  outline: none;
+  word-break: break-word;
+  white-space: pre-wrap;
+  caret-color: var(--accent-deep);
+  border-radius: 6px;
+  padding: 1px 3px;
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
+}
+
+.text:focus {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.text:empty::before {
+  content: attr(data-placeholder);
+  color: #B8849A;
+  font-weight: 400;
+}
+
+.item.done .text {
+  text-decoration: line-through;
+  text-decoration-color: var(--accent-deep);
+  text-decoration-thickness: 2px;
+  opacity: 0.55;
+}
+
+.item.flash {
+  animation: flashBg 0.9s ease-in-out 3;
+}
+
+@keyframes flashBg {
+  0%, 100% { background: rgba(255, 255, 255, 0.66); }
+  50% { background: var(--accent-softer, rgba(255, 233, 242, 0.95)); }
+}
+
+/* 事项行内小按钮 */
+.item-tools {
+  flex: none;
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+
+.item:hover .item-tools,
+.item:focus-within .item-tools {
+  opacity: 1;
+}
+
+.mini {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.78);
+  color: #A96B85;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s, background 0.15s, color 0.15s;
+}
+
+.mini svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+.mini .icon-s {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.mini:hover {
+  background: #fff;
+  color: var(--accent-deep);
+  transform: scale(1.15);
+}
+
+.mini.del:hover {
+  background: var(--accent-softer, #FFE0EC);
+  color: var(--accent-deep);
+}
+
+/* 提醒时间徽标 */
+.remind-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 3px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px dashed var(--accent);
+  font-size: 10.5px;
+  color: #B0567E;
+}
+
+.remind-badge svg {
+  width: 10px;
+  height: 10px;
+  fill: currentColor;
+}
+
+/* 提醒设置弹层 */
+.remind-pop {
+  position: absolute;
+  right: 6px;
+  top: calc(100% - 2px);
+  z-index: 9;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 6px;
+  background: rgba(255, 253, 254, 0.97);
+  border-radius: 12px;
+  border: 1px solid var(--pink-white-deep);
+  box-shadow: 0 6px 18px var(--shadow-soft, rgba(170, 90, 120, 0.3));
+}
+
+.remind-pop input[type="datetime-local"] {
+  border: 1px solid var(--pink-white-deep);
+  border-radius: 8px;
+  padding: 3px 6px;
+  font: inherit;
+  font-size: 11px;
+  color: var(--ink);
+  background: #FFFAFC;
+  outline: none;
+}
+
+/* 空状态 */
+.empty {
+  text-align: center;
+  padding: 26px 10px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.empty-face {
+  font-size: 22px;
+  display: block;
+  margin-bottom: 6px;
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ---------- 添加事项 ---------- */
+
+.adder {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px 4px;
+  flex: none;
+}
+
+.adder-input {
+  flex: 1;
+  min-width: 0;
+  border: 1.5px dashed var(--accent-soft, #F2B9CE);
+  background: var(--white-soft);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  caret-color: var(--accent-deep);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.adder-input:focus {
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.adder-input::placeholder {
+  color: #999999;
+}
+
+.adder-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--accent), var(--accent-deep));
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex: none;
+  box-shadow: 0 4px 10px var(--accent-deep-soft, rgba(226, 120, 159, 0.42));
+  transition: transform 0.2s;
+}
+
+.adder-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.adder-btn:hover {
+  transform: scale(1.12) rotate(90deg);
+}
+
+.adder-btn:active {
+  transform: scale(0.95);
+}
+
+/* ---------- 底部信息栏 ---------- */
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 12px 10px;
+  font-size: 11px;
+  color: var(--ink-soft);
+  flex: none;
+}
+
+.meta-clock {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.meta-save {
+  flex: 1;
+  text-align: right;
+}
+
+.save-heart {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+.save-heart svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  transition: transform 0.2s;
+}
+
+.save-heart:hover svg {
+  transform: scale(1.25);
+}
+
+/* ---------- 缩放手柄 ---------- */
+
+.resize {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 20px;
+  height: 20px;
+  cursor: nwse-resize;
+  -webkit-app-region: no-drag;
+  display: grid;
+  place-items: center;
+  color: var(--accent-soft, #F2B9CE);
+  border-radius: 8px;
+  z-index: 4;
+  transition: color 0.15s, background 0.15s;
+}
+
+.resize svg {
+  width: 14px;
+  height: 14px;
+}
+
+.resize .icon-s {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.resize:hover {
+  color: var(--accent-deep);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+body.resizing {
+  cursor: nwse-resize;
+}
+
+body.resizing .note {
+  transition: none;
+}
+
+/* ---------- 穿透模式提示 ---------- */
+
+.pass-tip {
+  position: absolute;
+  left: 50%;
+  bottom: 48px;
+  transform: translateX(-50%) translateY(8px);
+  background: rgba(255, 252, 254, 0.96);
+  border: 1.5px dashed var(--accent);
+  color: #333333;
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 8;
+  box-shadow: 0 4px 14px var(--shadow-soft, rgba(170, 90, 120, 0.26));
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+body.passthrough .pass-tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- 轻提示 ---------- */
+
+.toast {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  background: rgba(255, 252, 254, 0.97);
+  border: 1.5px solid var(--pink-white-deep);
+  color: #333333;
+  font-size: 12px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  box-shadow: 0 6px 20px var(--shadow-soft, rgba(170, 90, 120, 0.3));
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+  max-width: 86%;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- 编辑时跟随光标的小星星 ---------- */
+
+.caret-star {
+  position: fixed;
+  left: 0;
+  top: 0;
+  font-size: 11px;
+  color: var(--accent);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 15;
+  text-shadow: 0 0 6px var(--accent-soft, rgba(240, 156, 187, 0.85));
+  animation: starJump 0.7s ease-in-out infinite;
+}
+
+@keyframes starJump {
+  0%, 100% { transform: translateY(0) scale(1) rotate(-8deg); }
+  50% { transform: translateY(-4px) scale(1.2) rotate(10deg); }
+}
+
+/* ---------- 保存时飘出的爱心 ---------- */
+
+.heart-fly {
+  position: fixed;
+  pointer-events: none;
+  z-index: 30;
+  color: var(--accent-deep);
+  font-size: 14px;
+  text-shadow: 0 0 8px var(--accent-deep-soft, rgba(226, 120, 159, 0.65));
+  animation: heartUp 1s ease-out forwards;
+}
+
+@keyframes heartUp {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.4); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx, 0px)), -70px) scale(1.2) rotate(var(--rot, 0deg)); }
+}
+
+/* ---------- 提醒触发：抖动 + 呼吸发光 ---------- */
+
+.note.reminding {
+  animation: shake 0.55s ease-in-out 3, breathe 1.8s ease-in-out 0.4s infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  15% { transform: translate(-5px, 1px) rotate(-0.6deg); }
+  35% { transform: translate(5px, -1px) rotate(0.6deg); }
+  55% { transform: translate(-4px, 0) rotate(-0.4deg); }
+  80% { transform: translate(4px, 0) rotate(0.4deg); }
+}
+
+@keyframes breathe {
+  0%, 100% {
+    box-shadow: 0 10px 28px var(--shadow-soft, rgba(170, 90, 120, 0.26)),
+      0 0 0 var(--accent-deep-soft, rgba(240, 156, 187, 0));
+  }
+  50% {
+    box-shadow: 0 10px 34px var(--shadow-soft, rgba(170, 90, 120, 0.34)),
+      0 0 30px 8px var(--accent-deep-soft, rgba(240, 156, 187, 0.55));
+  }
+}
+
+/* ---------- 顶部吉祥物（会动的卡通角色） ---------- */
+
+/* 吉祥物：放大并悬浮在便签右侧 */
+.mascot {
+  position: absolute;
+  right: 2px;
+  top: 45%;
+  width: 84px;
+  height: 84px;
+  z-index: 3;
+  cursor: pointer;
+  transform: translateY(-50%);
+  animation: mascotBob 3.4s ease-in-out infinite;
+  -webkit-app-region: no-drag;
+  display: grid;
+  place-items: center;
+  will-change: transform;
+}
+
+.mascot svg,
+.mascot img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  overflow: visible;
+  transition: transform 0.2s;
+}
+
+.mascot:hover svg,
+.mascot:hover img {
+  transform: scale(1.1) rotate(-3deg);
+}
+
+.mascot:focus-visible {
+  outline: none;
+}
+
+.mascot:focus-visible svg,
+.mascot:focus-visible img {
+  filter: drop-shadow(0 0 4px var(--accent));
+}
+
+@keyframes mascotBob {
+  0%, 100% { transform: translateY(-50%) translateY(0); }
+  50% { transform: translateY(-50%) translateY(-5px); }
+}
+
+/* 点击互动：跳跃 */
+.mascot.jump {
+  animation: mJump 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes mJump {
+  0% { transform: translateY(-50%) translateY(0) scale(1); }
+  30% { transform: translateY(-50%) translateY(-20px) scale(1.12); }
+  55% { transform: translateY(-50%) translateY(0) scale(0.94); }
+  75% { transform: translateY(-50%) translateY(-6px) scale(1.03); }
+  100% { transform: translateY(-50%) translateY(0) scale(1); }
+}
+
+/* 眨眼 */
+.m-eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mBlink 4.4s infinite;
+}
+
+@keyframes mBlink {
+  0%, 91%, 100% { transform: scaleY(1); }
+  94% { transform: scaleY(0.08); }
+  97% { transform: scaleY(1); }
+}
+
+/* 挥手 */
+.m-arm {
+  transform-box: fill-box;
+  transform-origin: 18% 88%;
+  animation: mWave 1.5s ease-in-out infinite;
+}
+
+@keyframes mWave {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(16deg); }
+}
+
+/* 耳朵/圆耳抖动 */
+.m-ear-l,
+.m-ear-r {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: mEar 5.2s ease-in-out infinite;
+}
+
+.m-ear-r {
+  animation-delay: -2.6s;
+}
+
+@keyframes mEar {
+  0%, 86%, 100% { transform: rotate(0deg); }
+  90% { transform: rotate(-8deg); }
+  94% { transform: rotate(4deg); }
+}
+
+/* 太阳光芒缓慢旋转 */
+.m-rays {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mRays 24s linear infinite;
+}
+
+@keyframes mRays {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 环绕漂浮的小爱心/星星 */
+.m-h1,
+.m-h2,
+.m-h3,
+.m-z1,
+.m-z2 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mFloat 2.9s ease-in-out infinite;
+}
+
+.m-h2,
+.m-z2 {
+  animation-delay: -1s;
+}
+
+.m-h3 {
+  animation-delay: -2s;
+}
+
+@keyframes mFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.12); }
+}
+
+/* ---------- 背景可爱简笔画 ---------- */
+
+.doodles {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.doodle {
+  position: absolute;
+  color: var(--accent);
+  opacity: 0.17;
+  transform: rotate(var(--rot, 0deg));
+  animation: doodleFloat 7s ease-in-out infinite;
+}
+
+.doodle svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@keyframes doodleFloat {
+  0%, 100% { transform: rotate(var(--rot, 0deg)) translateY(0); }
+  50% { transform: rotate(var(--rot, 0deg)) translateY(-6px); }
+}
+
+/* ---------- 调色盘面板 ---------- */
+
+.theme-panel {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 54px;
+  bottom: 10px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(255, 253, 254, 0.995);
+  border: 1.5px solid var(--pink-white-deep);
+  border-radius: 18px;
+  box-shadow: 0 10px 26px var(--shadow-soft, rgba(170, 90, 120, 0.3));
+  overflow-y: auto;
+}
+
+.theme-panel[hidden] {
+  display: none;
+}
+
+.theme-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.theme-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.theme-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.theme-row label {
+  width: 66px;
+  flex: none;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.theme-row input[type="color"] {
+  width: 32px;
+  height: 24px;
+  border: none;
+  border-radius: 7px;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  flex: none;
+}
+
+.theme-row input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.theme-row input[type="color"]::-webkit-color-swatch {
+  border: 1.5px solid var(--pink-white-deep);
+  border-radius: 7px;
+}
+
+.hex {
+  flex: 1;
+  min-width: 0;
+  border: 1.5px solid var(--pink-white-deep);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  background: #fff;
+  outline: none;
+  text-transform: uppercase;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.hex:focus {
+  border-color: var(--accent);
+}
+
+.hex.invalid {
+  border-color: var(--accent-deep);
+  background: #FFF0F5;
+}
+
+.theme-op input[type="range"] {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--accent-deep);
+  cursor: pointer;
+}
+
+.theme-op span {
+  width: 40px;
+  flex: none;
+  text-align: right;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #333333;
+}
+
+/* 颜色主题卡片（颜色与吉祥物成套切换） */
+.theme-preset-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.theme-presets {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.theme-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 5px 2px 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  box-shadow: 0 2px 6px var(--shadow-softer, rgba(170, 90, 120, 0.2));
+  transition: transform 0.15s;
+}
+
+.theme-card:hover {
+  transform: scale(1.07);
+}
+
+.theme-card.active {
+  outline: 2px solid var(--accent-deep);
+  outline-offset: 1px;
+}
+
+.theme-card-icon {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+
+.theme-card-icon svg,
+.theme-card-icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* 卡片内小吉祥物暂停动画（避免面板打开时十几个 SVG 同时动画） */
+.theme-card-icon .m-eyes,
+.theme-card-icon .m-arm,
+.theme-card-icon .m-ear-l,
+.theme-card-icon .m-ear-r,
+.theme-card-icon .m-rays,
+.theme-card-icon .m-h1,
+.theme-card-icon .m-h2,
+.theme-card-icon .m-h3,
+.theme-card-icon .m-z1,
+.theme-card-icon .m-z2 {
+  animation: none;
+}
+
+.theme-card-name {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #333333;
+}
+
+/* 背景简笔画选择器 */
+.doodle-row {
+  align-items: flex-start;
+}
+
+.doodle-row label {
+  margin-top: 4px;
+}
+
+.doodle-picker {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.doodle-opt {
+  width: 36px;
+  height: 27px;
+  border-radius: 8px;
+  border: 1.5px solid var(--pink-white-deep);
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: var(--accent-deep);
+  padding: 0;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.doodle-opt svg {
+  width: 17px;
+  height: 17px;
+}
+
+.doodle-opt:hover {
+  transform: scale(1.12);
+}
+
+.doodle-opt.active {
+  outline: 2px solid var(--accent-deep);
+  outline-offset: 1px;
+  background: var(--accent-softer, #FFF0F5);
+}
+
+.theme-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.theme-actions button {
+  border: none;
+  border-radius: 999px;
+  padding: 5px 14px;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--white-soft);
+  color: var(--ink);
+  transition: background 0.18s, transform 0.18s;
+}
+
+.theme-actions button:hover {
+  background: #fff;
+  transform: scale(1.05);
+}
+
+.theme-tip {
+  margin: 0;
+  font-size: 10.5px;
+  color: #777777;
+  text-align: center;
+}
+
+/* ---------- 可访问性 ---------- */
+
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
