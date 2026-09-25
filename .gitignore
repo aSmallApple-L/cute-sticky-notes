@@ -3,6 +3,7 @@ dist/
 build/
 .eb-cache/
 .build-log*.txt
+.gh-login*.txt
 
 # 生成吉祥物时的临时中间文件
 _*
