@@ -1,6 +1,10 @@
 node_modules/
 dist/
 dist2/
+
+# 解包待替换的暂存目录与一键更新脚本
+.stage/
+更新到新版本.bat
 build/
 .eb-cache/
 # 构建与调试日志（.build-log*.txt / .gh-*.txt / .run-*.txt 等）
