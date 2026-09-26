@@ -1,6 +1,6 @@
 {
   "name": "cute-sticky-notes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "卡通可爱风桌面悬浮便签（Electron）",
   "main": "main.js",
   "license": "MIT",
