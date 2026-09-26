@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;">
+  <title>计时器</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="timer.css">
+</head>
+<body>
+
+  <!-- 猫耳朵（与便签一致，坐在卡片顶边上） -->
+  <span class="ear ear-l" aria-hidden="true"><i></i></span>
+  <span class="ear ear-r" aria-hidden="true"><i></i></span>
+
+  <!-- 计时器主体 -->
+  <main class="t-card" id="tCard">
+
+    <!-- 头部 -->
+    <div class="t-head">
+      <span class="t-title" id="tTitle">⏱ 计时器</span>
+      <span class="t-mascot" id="tMascot" title="点我加油~"></span>
+      <button class="tool tool-close" id="btnTClose" type="button" title="关闭计时器">
+        <svg class="icon-s" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="wave" aria-hidden="true"></div>
+
+    <!-- 翻页时钟 -->
+    <div class="t-flip" id="tFlip" aria-live="off">
+      <div class="flip" data-unit="h1"></div>
+      <div class="flip" data-unit="h2"></div>
+      <span class="t-colon">:</span>
+      <div class="flip" data-unit="m1"></div>
+      <div class="flip" data-unit="m2"></div>
+      <span class="t-colon">:</span>
+      <div class="flip" data-unit="s1"></div>
+      <div class="flip" data-unit="s2"></div>
+    </div>
+
+    <!-- 进度条 -->
+    <div class="t-bar" id="tBar"><div class="t-bar-fill" id="tBarFill"></div></div>
+
+    <!-- 状态 -->
+    <div class="t-status" id="tStatus">准备就绪</div>
+
+    <div class="t-body">
+      <!-- 模式切换 -->
+      <div class="t-seg" id="tSeg">
+        <button type="button" data-mode="down">⏳ 倒计时</button>
+        <button type="button" data-mode="up">⏱ 正计时</button>
+      </div>
+
+      <!-- 倒计时时长 -->
+      <div class="t-dur" id="tDur">
+        <div class="t-num"><input id="durH" type="number" min="0" max="99" value="0"><label for="durH">时</label></div>
+        <div class="t-num"><input id="durM" type="number" min="0" max="59" value="5"><label for="durM">分</label></div>
+        <div class="t-num"><input id="durS" type="number" min="0" max="59" value="0"><label for="durS">秒</label></div>
+      </div>
+      <div class="t-chips" id="tChips">
+        <button class="t-chip" type="button" data-sec="60">1 分钟</button>
+        <button class="t-chip" type="button" data-sec="300">5 分钟</button>
+        <button class="t-chip" type="button" data-sec="900">15 分钟</button>
+        <button class="t-chip" type="button" data-sec="1500">25 分钟</button>
+        <button class="t-chip" type="button" data-sec="2700">45 分钟</button>
+      </div>
+
+      <!-- 操作 -->
+      <div class="t-actions">
+        <button class="t-btn" id="btnTStart" type="button">▶ 开始</button>
+        <button class="t-btn ghost" id="btnTReset" type="button">↺ 重置</button>
+      </div>
+
+      <p class="t-hint">拖动卡片可移动 · 右下角可缩放 · 正/倒计时随时切换</p>
+    </div>
+
+    <!-- 缩放手柄 -->
+    <div class="resize" id="tResize" title="拖动缩放">
+      <svg class="icon-s" viewBox="0 0 12 12"><path d="M10.5 1.5l-9 9M10.5 5.5l-5 5M10.5 9.5l-1 1"/></svg>
+    </div>
+  </main>
+
+  <!-- 轻提示 -->
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="timer.js"></script>
+</body>
+</html>

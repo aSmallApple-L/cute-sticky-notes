@@ -1,9 +1,10 @@
 node_modules/
 dist/
+dist2/
 build/
 .eb-cache/
-.build-log*.txt
-.gh-*.txt
+# 构建与调试日志（.build-log*.txt / .gh-*.txt / .run-*.txt 等）
+.*.txt
 
 # 生成吉祥物时的临时中间文件
 _*

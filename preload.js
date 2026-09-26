@@ -23,6 +23,13 @@ contextBridge.exposeInMainWorld('sticky', {
   toggleTopmost: () => ipcRenderer.invoke('note:toggle-topmost'),
   // 缩放窗口
   resize: (width, height) => ipcRenderer.send('note:resize', width, height),
+  // 计时器
+  toggleTimer: () => ipcRenderer.invoke('timer:toggle'),
+  closeTimer: () => ipcRenderer.send('timer:close'),
+  resizeTimer: (width, height) => ipcRenderer.send('timer:resize', width, height),
+  getTimerState: () => ipcRenderer.invoke('timer:load'),
+  saveTimer: (state) => ipcRenderer.send('timer:save', state),
+  notifyDone: (msg) => ipcRenderer.send('timer:done', msg),
   // 主题（调色盘）
   getTheme: () => ipcRenderer.invoke('theme:load'),
   saveTheme: (theme) => ipcRenderer.send('theme:save', theme),
@@ -32,4 +39,5 @@ contextBridge.exposeInMainWorld('sticky', {
   onPassthrough: (cb) => ipcRenderer.on('passthrough:state', (_e, on) => cb(on)),
   onTopmost: (cb) => ipcRenderer.on('topmost:state', (_e, on) => cb(on)),
   onThemeChanged: (cb) => ipcRenderer.on('theme:changed', (_e, theme) => cb(theme)),
+  onTimerState: (cb) => ipcRenderer.on('timer:state', (_e, state) => cb(state)),
 });

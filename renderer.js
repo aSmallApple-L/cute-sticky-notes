@@ -24,6 +24,7 @@
     btnNew: $('#btnNew'),
     btnPin: $('#btnPin'),
     btnPass: $('#btnPass'),
+    btnTimer: $('#btnTimer'),
     btnMin: $('#btnMin'),
     btnClose: $('#btnClose'),
     btnTheme: $('#btnTheme'),
@@ -95,6 +96,7 @@
     api.onPassthrough((on) => setPassthrough(on, true));
     api.onTopmost((on) => els.btnPin.classList.toggle('active', on));
     api.onThemeChanged((t) => applyTheme(t));
+    api.onTimerState((s) => els.btnTimer.classList.toggle('active', !!s.open));
 
     bindCaretStar();
   }
@@ -305,6 +307,11 @@
       markDirty();
     });
     els.btnNew.addEventListener('click', () => api.newNote());
+    els.btnTimer.addEventListener('click', async () => {
+      const s = await api.toggleTimer();
+      els.btnTimer.classList.toggle('active', !!s.open);
+      toast(s.open ? '⏱ 计时器已打开' : '⏱ 计时器已收起');
+    });
     els.btnMin.addEventListener('click', () => api.minimize());
     els.btnClose.addEventListener('click', () => api.close());
     els.btnPin.addEventListener('click', async () => {

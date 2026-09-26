@@ -21,6 +21,9 @@
       "index.html",
       "renderer.js",
       "style.css",
+      "timer.html",
+      "timer.js",
+      "timer.css",
       "assets/**"
     ],
     "directories": {
